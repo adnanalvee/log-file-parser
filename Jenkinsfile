@@ -10,6 +10,7 @@ pipeline {
 			steps {
 				echo "Hello silvertail"
 				echo "{$SBT_HOME}"
+                sh "sbt test"
 			}
 		}
 		
