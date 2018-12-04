@@ -1,0 +1,10 @@
+[0m[[0minfo[0m] [0m[32mParserTest:[0m[0m
+[0m[[0minfo[0m] [0m[32m- should correctly extract values from 'REQUEST' field[0m[0m
+[0m[[0minfo[0m] [0m[32m- should correctly extract values from 'HEADERS' field[0m[0m
+[0m[[0minfo[0m] [0m[32m- should correctly extract values from 'ARGS' field[0m[0m
+[0m[[0minfo[0m] [0m[32m- should correctly extract values from 'COOKIE' field[0m[0m
+[0m[[0minfo[0m] [0m[32m- should correctly extract values from 'TCPXN' field[0m[0m
+[0m[[0minfo[0m] [0m[32m- should extract value from the 2nd index[0m[0m
+[0m[[0minfo[0m] [0m[32m- should extract email address by replacing %2540 for '@' sign[0m[0m
+[0m[[0minfo[0m] [0m[32m- should decode a string twice to extract the value[0m[0m
+[0m[[0minfo[0m] [0m[32m- should correctly validate ATTUID from string[0m[0m
