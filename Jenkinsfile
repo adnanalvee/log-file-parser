@@ -13,8 +13,8 @@ pipeline {
 		stage('testing stuff') {
 			steps {
 				echo "Hello silvertail"
-                sh 'sbt -jvm-debug 5005'
-				sh 'sbt test'
+				sh 'sbt clean'
+                sh 'sbt test'
 			}
 		}
 		
