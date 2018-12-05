@@ -10,7 +10,7 @@ lazy val root = (project in file(".")).
 val sparkVersion = "2.1.1"
 
 resolvers ++= Seq(
-  "apache-snapshots" at "http://repository.apache.org/snapshots/"
+  "apache-snapshots" at "http://repository.apache.org/snapshots/",
   "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
 )
 
