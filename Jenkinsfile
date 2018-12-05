@@ -18,7 +18,6 @@ pipeline {
 		stage('testing stuff') {
 			steps {
 				echo "Hello silvertail"
-				sh 'sbt -v clean'
                 sh 'sbt test'
 			}
 		}
