@@ -18,9 +18,19 @@ pipeline {
 		stage('testing stuff') {
 			steps {
 				echo "Hello silvertail"
-                sh 'sbt test'
+                // sh 'sbt test'
 			}
 		}
+        stage('branch master') {
+            when {
+                changeRequest branch: 'master'
+            }
+            steps {
+                echo "there was a change request"
+                sh 'sbt test'
+                echo "hello"
+            }
+        }
 		
 	}
 	
