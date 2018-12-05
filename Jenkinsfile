@@ -1,5 +1,8 @@
 pipeline {
     agent any
+     tools {
+        jdk '1.8.0_121'
+    }
     environment {
 	/*
     Tool name: 'sbt1.1.1' must match name sbt settings under Jenkins global tool configuration.
