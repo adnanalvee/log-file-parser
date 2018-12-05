@@ -13,7 +13,7 @@ resolvers ++= Seq(
   "apache-snapshots" at "http://repository.apache.org/snapshots/"
 )
 
-
+updateOptions := updateOptions.value.withGigahorse(false)
 
 libraryDependencies ++= Seq(
     "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
@@ -26,10 +26,4 @@ libraryDependencies ++= Seq(
     "com.github.scopt" %% "scopt" % "3.6.0"
   )
 
-  // META-INF discarding
-  mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
-     {
-      case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-      case x => MergeStrategy.first
-     }
-  }
+
