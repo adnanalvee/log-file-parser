@@ -18,7 +18,7 @@ pipeline {
 		stage('testing stuff') {
 			steps {
 				echo "Hello silvertail"
-                // sh 'sbt test'
+                // sh 'sbt test' 1
 			}
 		}
         stage('branch master') {
