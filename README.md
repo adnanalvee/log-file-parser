@@ -1,7 +1,7 @@
 ## Log file parser
 
 Parses a semi structured log file.
->         1, REQUEST, method=POST&page=bigcompany.com,
+        1, REQUEST, method=POST&page=bigcompany.com,
 		1, HEADERS, host=opus&dhost=kjl&user-agent=ipad,
 		1, BARS, JSESSIONID=XyMsdsd!dshtml&eshr=12345,
 		1, TCP, clientIp=1&serverIp=2&clientPort=3&serverPort=4,
