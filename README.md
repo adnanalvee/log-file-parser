@@ -1,6 +1,7 @@
 ## Log file parser
 
 Parses a semi structured log file.
+```
         1, REQUEST, method=POST&page=bigcompany.com,
 		1, HEADERS, host=opus&dhost=kjl&user-agent=ipad,
 		1, BARS, JSESSIONID=XyMsdsd!dshtml&eshr=12345,
@@ -9,6 +10,7 @@ Parses a semi structured log file.
 		1, DISCO, lots_of_stuff,
 		1, AGENT, windows,
 		2, REQUEST, Adnan
+```
 
 ### How to run
 1. Make sure you got sbt
