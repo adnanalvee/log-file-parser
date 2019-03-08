@@ -1,7 +1,7 @@
-package com.att.cdo.security.silvertail
+package com.adnan.logfileparser
 
-import com.att.cdo.security.silvertail.SparkSessionWrapper
-import com.att.cdo.security.silvertail.parserutils.Parser
+import com.adnan.logfileparser.SparkSessionWrapper
+import com.adnan.logfileparser.parserutils.Parser
 import org.apache.log4j.{Level, Logger}
 
 import org.apache.spark.SparkContext
@@ -33,17 +33,17 @@ class Main extends FlatSpec with SparkSessionWrapper with DataFrameComparer {
     val df1 = spark.sparkContext
       .parallelize(
         Seq(
-          ("1", "REQUEST", "method=POST&page=att.com"),
+          ("1", "REQUEST", "method=POST&page=bigcompany.com"),
           ("1", "HEADERS", "host=opus&dhost=kjl&user-agent=ipad"),
-          ("1", "COOKIE", "JSESSIONID=XyMsdsd!dshtml&attESHr=12345"),
-          ("1", "TCPCXN", "clientIp=1&serverIp=2&clientPort=3&serverPort=4"),
+          ("1", "BARS", "JSESSIONID=XyMsdsd!dshtml&eshr=12345"),
+          ("1", "TCP", "clientIp=1&serverIp=2&clientPort=3&serverPort=4"),
           ("1",
-           "ARGS",
-           "accountNumber=123&_om_req_id=&emailId=example@att.com&notes=fraud"),
-          ("1", "SDATA", "lots_of_stuff"),
-          ("1", "IP User-Agent Changed", "windows"),
+           "PARAMS",
+           "accountNumber=123&_om_req_id=&emailId=example@bigcompany.com&notes=fraud"),
+          ("1", "DISCO", "lots_of_stuff"),
+          ("1", "AGENT", "windows"),
           ("2", "REQUEST", "Adnan"),
-          ("2", "COOKIE", "Alvee")
+          ("2", "BARS", "Alvee")
         ))
 
     val df2 = df1.toDF("timestamp", "field", "value")
@@ -72,12 +72,12 @@ class Main extends FlatSpec with SparkSessionWrapper with DataFrameComparer {
         StructField("page", StringType),
         StructField("host", StringType),
         StructField("jsession_id", StringType),
-        StructField("atteshr", StringType),
+        StructField("eshr", StringType),
         StructField("client_ip", StringType),
         StructField("client_port", StringType),
         StructField("server_ip", StringType),
         StructField("server_port", StringType),
-        StructField("customer_email_address", StringType),
+        StructField("email_address", StringType),
         StructField("om_req_id", StringType),
         StructField("account_number", StringType),
         StructField("notes", StringType),
@@ -104,7 +104,7 @@ class Main extends FlatSpec with SparkSessionWrapper with DataFrameComparer {
     val expectedData = List(
       Row("1",
           "POST",
-          "att.com",
+          "bigcompany.com",
           "opus",
           "XyMsdsd!dshtml",
           "12345",
@@ -112,13 +112,13 @@ class Main extends FlatSpec with SparkSessionWrapper with DataFrameComparer {
           "2",
           "3",
           "4",
-          "example@att.com",
+          "example@bigcompany.com",
           "",
           "123",
           "fraud",
           "ipad",
           "windows",
-          "lots_of_stuff"
+          ""
           ),
       Row("2", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
     )
@@ -130,12 +130,12 @@ class Main extends FlatSpec with SparkSessionWrapper with DataFrameComparer {
         StructField("page", StringType),
         StructField("host", StringType),
         StructField("jsession_id", StringType),
-        StructField("atteshr", StringType),
+        StructField("eshr", StringType),
         StructField("client_ip", StringType),
         StructField("client_port", StringType),
         StructField("server_ip", StringType),
         StructField("server_port", StringType),
-        StructField("customer_email_address", StringType),
+        StructField("email_address", StringType),
         StructField("om_req_id", StringType),
         StructField("account_number", StringType),
         StructField("notes", StringType),

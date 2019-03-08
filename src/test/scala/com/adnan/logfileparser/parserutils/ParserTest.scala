@@ -1,6 +1,6 @@
-package com.att.cdo.security.silvertail.parserutils
+package com.adnan.logfileparser.parserutils
 
-import com.att.cdo.security.silvertail.parserutils.Parser._
+import com.adnan.logfileparser.parserutils.Parser._
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql._
@@ -32,8 +32,8 @@ class ParserTest
   }
 
   it should "correctly extract values from 'HEADERS' field" in {
-    val args_1 = "host=opusmobiled12.att.net&connection=keep-alive&user-agent=ipad"
-    assert(retrieveValuesFromHeaders(args_1) === ("opusmobiled12.att.net", "ipad"))
+    val args_1 = "host=opusmobiled12.Code.net&connection=keep-alive&user-agent=ipad"
+    assert(retrieveValuesFromHeaders(args_1) === ("opusmobiled12.Code.net", "ipad"))
     assert(retrieveValuesFromHeaders("host=") === ("", ""))
     assert(retrieveValuesFromHeaders("") === ("", ""))
     assert(retrieveValuesFromHeaders(null) === ("", ""))
@@ -68,14 +68,14 @@ class ParserTest
     val args_1 =
       """JSESSIONID=RSLTZ3LDxhvyQb153fhzyddpfh5vJzvz15sYy9wwns
       qhJP0FzmzK!366767447& REGISTER_HOSTNAME=ede5848634861c9bdea4ea011be23
-      1f5150d0052& OPUSM_NETC_AUTH_KEY=qsk54uDKFJ90&attESHr=DONOVAN%257cDALY
-      %257cdd641q%2540us%252eatt%252ecom%257c5072884021%257c%257ckd484v%257c
+      1f5150d0052& OPUSM_NETC_AUTH_KEY=qsk54uDKFJ90&eshr=DONOVAN%257cDALY
+      %257cdd641q%2540us%252eCode%252ecom%257c5072884021%257c%257ckd484v%257c
       %257cdd641q%252cRBBHRHH%252cZKFF7G6%252c7119481%257cNNNNYNNNNNNNNNNNN
       YNNNNNN%257cDONOVAN%257cXCW921002%257c1723asdfjlksdaf20980D"""
         .replaceAll("\n", "")
         .replaceAll("\\s", "")
-    val valid_attESHr =
-      """DONOVAN|DALY|dd641q@us.att.com|5072884021||kd484v|
+    val valid_eshr =
+      """DONOVAN|DALY|dd641q@us.Code.com|5072884021||kd484v|
     |dd641q,RBBHRHH,ZKFF7G6,7119481|NNNNYNNNNNNNNNNNNYNNNNNN|DONOVAN
     |XCW921002|1723asdfjlksdaf20980D"""
         .replaceAll("\n", "")
@@ -84,12 +84,12 @@ class ParserTest
       "RSLTZ3LDxhvyQb153fhzyddpfh5vJzvz15sYy9wwnsqhJP0FzmzK!366767447"
     val args_2 = ""
     val args_3 = ""
-    assert(retrieveFromCookie(args_1) === (valid_JESSIONID, valid_attESHr))
+    assert(retrieveFromCookie(args_1) === (valid_JESSIONID, valid_eshr))
     assert(retrieveFromCookie("JSESSIONID=X") === ("X", ""))
-    assert(retrieveFromCookie("attESHr=Y") === ("", "Y"))
+    assert(retrieveFromCookie("eshr=Y") === ("", "Y"))
     assert(retrieveFromCookie("") === ("", ""))
     assert(retrieveFromCookie(null) === ("", ""))
-    assert(retrieveFromCookie("JSESSIONID=X&attESHr=Y") != ("", ""))
+    assert(retrieveFromCookie("JSESSIONID=X&CodeESHr=Y") != ("", ""))
     assert(retrieveFromCookie("") != (null, null))
   }
 
@@ -142,40 +142,40 @@ class ParserTest
   }
 
   it should "decode a string twice to extract the value" in {
-    val decodedAtteshr =
-      """LISA%257cSTONE%257cls458g%2540us%252eatt%252ecom
+    val decodeEshr =
+      """LISA%257cSTONE%257cls458g%2540us%252eCode%252ecom
        %257c7275124674%257c%257ccm946g%257c%257cls458g%252cRGWKLKF%252cH3
        FWXB6%252c6857755%257cNNNNNYNNNNNNNNNNNYNNNNNN%257cLISA%257cXCW925
        036%257c0"""
         .replaceAll("\n", "")
         .replaceAll("\\s", "")
-    val encodedAtteshr =
-      """LISA|STONE|ls458g@us.att.com|7275124674||cm946g||
+    val encodedEshr =
+      """LISA|STONE|ls458g@us.Code.com|7275124674||cm946g||
       ls458g,RGWKLKF,H3FWXB6,6857755|NNNNNYNNNNNNNNNNNYNNNNNN|
       LISA|XCW925036|0"""
         .replaceAll("\n", "")
         .replaceAll("\\s", "")
 
-    assert(decodeTwice(decodedAtteshr) === encodedAtteshr)
+    assert(decodeTwice(decodeEshr) === encodedEshr)
     assert(decodeTwice("") === "")
     assert(decodeTwice(null) === "")
     assert(decodeTwice(null) != null)
   }
 
-  it should "correctly validate ATTUID from string" in {
+  it should "correctly validate CodeUID from string" in {
     val omReqId1 = "_om_req_id=0489%3A22%3Acw371s%3A4026104%3Aajax"
     val omReqId2 = "_om_req_id=0701:34:mh481u:1908968448"
-    val correctATTUID1 = "cw371s"
-    val correctATTUID2 = "mh481u"
-    assert(validateATTUID(omReqId1) === correctATTUID1)
-    assert(validateATTUID(omReqId2) === correctATTUID2)
-    assert(validateATTUID("_om_req_id=") === "")
-    assert(validateATTUID("") === "")
-    assert(validateATTUID("_om_req_id=BLANK:231070220") === "")
-    assert(validateATTUID("_om_req_id=BLANK%231070220") === "")
-    assert(validateATTUID("_om_req_id=4769:39:sl614f:") === "sl614f")
-    assert(validateATTUID(null) === "")
-    assert(validateATTUID(null) != null)
+    val correctCodeUID1 = "cw371s"
+    val correctCodeUID2 = "mh481u"
+    assert(validateCode(omReqId1) === correctCodeUID1)
+    assert(validateCode(omReqId2) === correctCodeUID2)
+    assert(validateCode("_om_req_id=") === "")
+    assert(validateCode("") === "")
+    assert(validateCode("_om_req_id=BLANK:231070220") === "")
+    assert(validateCode("_om_req_id=BLANK%231070220") === "")
+    assert(validateCode("_om_req_id=4769:39:sl614f:") === "sl614f")
+    assert(validateCode(null) === "")
+    assert(validateCode(null) != null)
 
   }
 

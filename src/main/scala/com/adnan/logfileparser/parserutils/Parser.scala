@@ -1,4 +1,4 @@
-package com.att.cdo.security.silvertail.parserutils
+package com.adnan.logfileparser.parserutils
 /* *
  * Making things immutable in version 2.0
  */
@@ -90,7 +90,7 @@ object Parser {
           key match {
             case "accountNumber" | "wcAccountNumber" =>
               Some("account_number" -> extractValueBySingleSplit(x))
-            case "_om_req_id" => Some("om_req_id" -> validateATTUID(x))
+            case "_om_req_id" => Some("om_req_id" -> validateCode(x))
             case "emailId" | "emailId.emailId" | "emailAddress" =>
               Some("customer_email" -> validateEmail(x))
             case "notes" =>
@@ -122,7 +122,7 @@ object Parser {
     * Retrieve values from COOKIE field as needed.
     *
     * @param values Multiple key, value string corresponding to the field "COOKIE" in the data
-    * @return Values extracted from keys "JSESSIONID", "attESHr".
+    * @return Values extracted from keys "JSESSIONID", "eshr".
     *         Returns an empty string if corresponding value/s are not found or is null.
     */
   def retrieveFromCookie(values: String): (String, String) = {
@@ -135,8 +135,8 @@ object Parser {
             key match {
               case "JSESSIONID" =>
                 Some("JSESSIONID" -> extractValueBySingleSplit(x))
-              case "attESHr" =>
-                Some("attESHr" -> decodeTwice(extractValueBySingleSplit(x)))
+              case "eshr" =>
+                Some("eshr" -> decodeTwice(extractValueBySingleSplit(x)))
               case _ => None
             }
           }
@@ -145,7 +145,7 @@ object Parser {
 
       (
         valueMap.getOrElse("JSESSIONID", ""),
-        valueMap.getOrElse("attESHr", "")
+        valueMap.getOrElse("eshr", "")
       )
     } else ("", "")
   }
@@ -182,8 +182,8 @@ object Parser {
   }
 
   /**
-    * Decodes a value twice to extract AT&T employee data.
-    * Used to decode value from "attESHr" key from the field COOKIE
+    * Decodes a value twice to extract data.
+    * Used to decode value from "esh" key from the field COOKIE
     *
     * @param value String to be parsed
     * @return Pipe delimited values containing employee information
@@ -207,12 +207,12 @@ object Parser {
   }
 
   /**
-    * Extracts ATTUID from a string by decoding.
+    * Extracts code from a string by decoding.
     *
     * @param values A key, value string corresponding to the field "ARGS" in the data
-    * @return ATTUID
+    * @return code
     */
-  def validateATTUID(values: String): String = {
+  def validateCode(values: String): String = {
     val value = scala.util.Try(values.trim.split("=", -1)(1)).getOrElse("")
     if (value.contains("%")) {
       val decodedVal: String = URLDecoder.decode(value, "UTF-8")
@@ -243,27 +243,27 @@ object Parser {
         case "HEADERS" =>
           val (host, user_agent) = retrieveValuesFromHeaders(values)
           Iterator("host" -> host, "user_agent" -> user_agent)
-        case "COOKIE" =>
-          val (jsession_id, atteshr) = retrieveFromCookie(values)
-          Iterator("jsession_id" -> jsession_id, "atteshr" -> atteshr)
-        case "TCPCXN" =>
+        case "BARS" =>
+          val (jsession_id, eshr) = retrieveFromCookie(values)
+          Iterator("jsession_id" -> jsession_id, "eshr" -> eshr)
+        case "TCP" =>
           val (client_ip, client_port, server_ip, server_port) =
             retrieveFromTcpcxn(values)
           Iterator("client_ip" -> client_ip,
                    "client_port" -> client_port,
                    "server_ip" -> server_ip,
                    "server_port" -> server_port)
-        case "ARGS" =>
+        case "PARAMS" =>
           val (account_number, om_req_id, customer_email_address, notes) =
             retrieveValuesFromArgs(values)
           Iterator("customer_email_address" -> customer_email_address,
                    "om_req_id" -> om_req_id,
                    "account_number" -> account_number,
                    "notes" -> notes)
-        case "IP User-Agent Changed" =>
+        case "AGENT" =>
           if (values.length > 1) Some("user_agent_changed" -> values)
           else Some("user_agent_changed" -> "")
-        case "SDATA" =>
+        case "XDATA" =>
           if (values.length > 1) Some("sdata" -> values) else Some("sdata" -> "")
         case _ => None
       }
@@ -275,7 +275,7 @@ object Parser {
       dataMapper.getOrElse("page", ""),
       dataMapper.getOrElse("host", ""),
       dataMapper.getOrElse("jsession_id", ""),
-      dataMapper.getOrElse("atteshr", ""),
+      dataMapper.getOrElse("eshr", ""),
       dataMapper.getOrElse("client_ip", ""),
       dataMapper.getOrElse("client_port", ""),
       dataMapper.getOrElse("server_ip", ""),

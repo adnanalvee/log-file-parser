@@ -1,10 +1,10 @@
 lazy val root = (project in file(".")).
   settings(
-  name := "silvertail-parser",
+  name := "semi_structured_log_file_parser",
   version := "0.1.0",
   scalaVersion := "2.11.0",
   assemblyJarName in assembly := "Adnan.jar",
-  mainClass in Compile := Some("com.att.cdo.security.Main")
+  mainClass in Compile := Some("com.adnan.logfileparser.Main")
   )
 
 val sparkVersion = "2.1.1"

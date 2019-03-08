@@ -1,4 +1,4 @@
-package com.att.cdo.security.silvertail
+package com.adnan.logfileparser
 
 import org.apache.log4j.Logger
 import org.apache.spark.sql.SparkSession
@@ -79,7 +79,7 @@ logger.info("UDF to join two lists in order executed successfully.")
         StructField("page", StringType),
         StructField("host", StringType),
         StructField("jsession_id", StringType),
-        StructField("atteshr", StringType),
+        StructField("eshr", StringType),
         StructField("client_ip", StringType),
         StructField("client_port", StringType),
         StructField("server_ip", StringType),

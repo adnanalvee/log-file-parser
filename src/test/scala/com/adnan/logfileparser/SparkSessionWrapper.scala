@@ -1,5 +1,4 @@
-
-package com.att.cdo.security.silvertail
+package com.adnan.logfileparser
 
 import org.apache.spark.sql.SparkSession
 
